@@ -42,7 +42,7 @@ class DioBuilderFactory {
         .addRequestContentType(type: requestContentType)
         .addInterceptor(interceptor: (client) => internetInterceptor);
 
-    if (kReleaseMode) {
+    if (!kReleaseMode) {
       builder.addInterceptor(interceptor: (client) => logger);
     }
 
