@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:nebx/src/infrastructure/services/dio_request/dio_builder_factory.dart';
 import 'package:nebx/src/infrastructure/services/dio_request/dio_implementation.dart';
 import 'package:nebx/src/shared/models/verdict.dart';
-import 'package:nebx/src/shared/token_helper.dart';
+import 'package:nebx/src/shared/helpers/token_helper.dart';
 
 import 'package:universal_io/io.dart';
 

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:nebx/src/shared/file_helper.dart';
+import 'package:nebx/src/shared/helpers/file_helper.dart';
 
 abstract interface class IFormDataBuilder {
   FormDataBuilder addRecords(Map<String, dynamic> keyValues);
