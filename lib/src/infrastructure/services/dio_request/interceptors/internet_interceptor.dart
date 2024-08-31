@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:nebx/infrastructure/services/internet_checker_implementation.dart';
+import 'package:nebx/src/infrastructure/services/internet_checker_implementation.dart';
 
 class InternetInterceptor extends Interceptor {
   late final IInternetChecker _internetChecker;

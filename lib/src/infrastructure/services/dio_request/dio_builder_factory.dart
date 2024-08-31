@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
-import 'package:nebx/infrastructure/services/dio_request/constants/http_content_type.dart';
-import 'package:nebx/infrastructure/services/dio_request/dio_builder.dart';
-import 'package:nebx/infrastructure/services/dio_request/dio_implementation.dart';
-import 'package:nebx/infrastructure/services/dio_request/interceptors/internet_interceptor.dart';
-import 'package:nebx/infrastructure/services/dio_request/interceptors/jwt_interceptor.dart';
-import 'package:nebx/infrastructure/services/internet_checker_implementation.dart';
-import 'package:nebx/shared/models/verdict.dart';
+import 'package:nebx/src/infrastructure/services/dio_request/constants/http_content_type.dart';
+import 'package:nebx/src/infrastructure/services/dio_request/dio_builder.dart';
+import 'package:nebx/src/infrastructure/services/dio_request/dio_implementation.dart';
+import 'package:nebx/src/infrastructure/services/dio_request/interceptors/internet_interceptor.dart';
+import 'package:nebx/src/infrastructure/services/dio_request/interceptors/jwt_interceptor.dart';
+import 'package:nebx/src/infrastructure/services/internet_checker_implementation.dart';
+import 'package:nebx/src/shared/models/verdict.dart';
+
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class DioBuilderFactory {

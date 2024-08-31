@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:nebx/infrastructure/services/dio_request/dio_implementation.dart';
+import 'package:nebx/src/infrastructure/services/dio_request/dio_implementation.dart';
 
 abstract interface class IDioBuilder {
   DioBuilder addRequestTimeOut({

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_alert/flutter_platform_alert.dart';
-import 'package:nebx/infrastructure/services/interfaces/idialog.dart';
+import 'package:nebx/src/infrastructure/services/interfaces/idialog.dart';
 
 class NativeDialogImplementation implements IDialog {
   @override
