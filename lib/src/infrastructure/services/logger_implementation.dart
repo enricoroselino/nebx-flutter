@@ -12,7 +12,6 @@ class LoggerImplementation implements ILogger {
   LoggerImplementation() {
     final printer = PrettyPrinter(
       dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
-      stackTraceBeginIndex: 1,
     );
 
     _logger = Logger(
