@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:universal_io/io.dart';
 
 abstract interface class IIssue {
@@ -5,20 +6,20 @@ abstract interface class IIssue {
 
   IssueLayer get issueLayer;
 
-  int get statusCode;
-
   IssueType get issueType;
+
+  int get statusCode;
 }
 
-class Issue implements IIssue {
+class Issue extends Equatable implements IIssue {
   @override
   final String message;
   @override
   final IssueLayer issueLayer;
   @override
-  final int statusCode;
-  @override
   final IssueType issueType;
+  @override
+  final int statusCode;
 
   Issue._(
     this.message,
@@ -108,6 +109,9 @@ class Issue implements IIssue {
         IssueType.cancel,
         statusCode: HttpStatus.clientClosedRequest,
       );
+
+  @override
+  List<Object?> get props => [message, issueLayer, issueType, statusCode];
 }
 
 enum IssueType {
