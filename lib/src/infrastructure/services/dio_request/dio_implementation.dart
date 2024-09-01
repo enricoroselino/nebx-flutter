@@ -50,7 +50,7 @@ abstract interface class IDioClient {
 
   Future<IVerdict> upload({
     required String url,
-    FormData? data,
+    required FormData data,
     Map<String, dynamic>? queryParams,
     CancelToken? cancelToken,
     void Function(int, int)? onSendProgress,
@@ -201,7 +201,7 @@ class DioImplementation implements IDioClient {
   @override
   Future<IVerdict> upload({
     required String url,
-    FormData? data,
+    required FormData data,
     Map<String, dynamic>? queryParams,
     CancelToken? cancelToken,
     void Function(int, int)? onSendProgress,
