@@ -5,18 +5,17 @@ import 'package:xml2json/xml2json.dart';
 class HttpRequestHelper {
   HttpRequestHelper._();
 
-  static Map<String, dynamic> jsonStringToMap(dynamic responseData) {
-    return jsonDecode(responseData as String);
+  static Map<String, dynamic> jsonStringToMap(String responseData) {
+    return jsonDecode(responseData);
   }
 
   static String mapToJsonString(Map<String, dynamic> payload) {
     return jsonEncode(payload);
   }
 
-  static Map<String, dynamic> xmlStringToMap(dynamic responseData) {
+  static Map<String, dynamic> xmlStringToMap(String responseData) {
     final xmlParser = Xml2Json();
-    xmlParser.parse(responseData as String);
-    final Map<String, dynamic> jsonObject = jsonDecode(xmlParser.toParker());
-    return jsonObject;
+    xmlParser.parse(responseData);
+    return jsonStringToMap(xmlParser.toParker());
   }
 }
