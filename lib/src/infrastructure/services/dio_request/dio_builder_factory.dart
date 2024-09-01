@@ -6,7 +6,6 @@ import 'package:nebx/src/infrastructure/services/dio_request/interceptors/intern
 import 'package:nebx/src/infrastructure/services/dio_request/interceptors/jwt_interceptor.dart';
 import 'package:nebx/src/infrastructure/services/internet_checker_implementation.dart';
 import 'package:nebx/src/shared/models/verdict.dart';
-
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class DioBuilderFactory {
@@ -38,9 +37,10 @@ class DioBuilderFactory {
 
     final internetInterceptor = InternetInterceptor(checker: internetChecker);
 
-    var builder = clientPlain(baseUrl: baseUrl)
-        .addRequestContentType(type: requestContentType)
-        .addInterceptor(interceptor: (client) => internetInterceptor);
+    var builder = clientPlain(
+      baseUrl: baseUrl,
+      requestContentType: requestContentType,
+    ).addInterceptor(interceptor: (client) => internetInterceptor);
 
     if (!kReleaseMode) {
       builder.addInterceptor(interceptor: (client) => logger);
@@ -62,11 +62,10 @@ class DioBuilderFactory {
     );
 
     var builder = clientBasic(
-        baseUrl: baseUrl,
-        internetChecker: internetChecker
-    )
-        .addRequestContentType(type: requestContentType)
-        .addInterceptor(interceptor: (client) => jwtInterceptor);
+      baseUrl: baseUrl,
+      internetChecker: internetChecker,
+      requestContentType: requestContentType,
+    ).addInterceptor(interceptor: (client) => jwtInterceptor);
 
     return builder;
   }
