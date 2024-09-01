@@ -6,7 +6,10 @@ import 'package:nebx/src/shared/helpers/file_helper.dart';
 abstract interface class IFormDataBuilder {
   FormDataBuilder addRecords(Map<String, dynamic> keyValues);
 
-  FormDataBuilder addFileStream({required PlatformFile file});
+  FormDataBuilder addFileStream({
+    required PlatformFile file,
+    MediaType? contentType,
+  });
 
   FormDataBuilder addFileBytes({
     required List<int> bytes,
@@ -14,7 +17,10 @@ abstract interface class IFormDataBuilder {
     MediaType? contentType,
   });
 
-  FormDataBuilder addFile({required PlatformFile file});
+  FormDataBuilder addFile({
+    required PlatformFile file,
+    MediaType? contentType,
+  });
 
   FormData build();
 }
@@ -51,14 +57,16 @@ class FormDataBuilder implements IFormDataBuilder {
   }
 
   @override
-  FormDataBuilder addFile({required PlatformFile file}) {
+  FormDataBuilder addFile({
+    required PlatformFile file,
+    MediaType? contentType,
+  }) {
     if (!FileHelper.isFilePicked(file)) return this;
-    final contentType = FileHelper.parseMediaType(file);
 
     final multipart = MultipartFile.fromFileSync(
       file.path!,
       filename: file.name,
-      contentType: contentType,
+      contentType: contentType ?? FileHelper.parseMediaType(file),
     );
 
     _attachments.add(multipart);
@@ -66,15 +74,17 @@ class FormDataBuilder implements IFormDataBuilder {
   }
 
   @override
-  FormDataBuilder addFileStream({required PlatformFile file}) {
+  FormDataBuilder addFileStream({
+    required PlatformFile file,
+    MediaType? contentType,
+  }) {
     if (!FileHelper.isFilePicked(file)) return this;
-    final contentType = FileHelper.parseMediaType(file);
 
     final multipart = MultipartFile.fromStream(
       () => file.readStream!,
       file.size,
       filename: file.name,
-      contentType: contentType,
+      contentType: contentType ?? FileHelper.parseMediaType(file),
     );
 
     _attachments.add(multipart);
