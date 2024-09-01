@@ -1,7 +1,8 @@
 name: nebx
-description: "Nebx is a everyday tools that support a powerful yet simple Dio HTTP client with robust error handling and various verbose yet simple features implementation."
+description: "Nebx is a wrapper that support a powerful Dio HTTP client with robust error handling, result pattern, and various verbose yet simple features implementation."
 version: 0.0.1
 homepage: https://github.com/enricoroselino/nebx-flutter
+repository: https://github.com/enricoroselino/nebx-flutter
 
 environment:
   sdk: ^3.5.1
