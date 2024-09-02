@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:nebx/src/shared/models/issue.dart';
+import 'package:nebx_verdict/nebx_verdict.dart';
 import 'package:universal_io/io.dart';
 
 abstract interface class IDioIssueHandler {

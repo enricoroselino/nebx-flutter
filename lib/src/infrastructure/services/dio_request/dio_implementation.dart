@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:nebx/src/infrastructure/services/dio_request/constants/http_content_type.dart';
 import 'package:nebx/src/infrastructure/services/dio_request/dio_issue_handler.dart';
-import 'package:nebx/src/shared/models/issue.dart';
-import 'package:nebx/src/shared/models/verdict.dart';
+import 'package:nebx_verdict/nebx_verdict.dart';
 import 'package:universal_io/io.dart';
+
 
 abstract interface class IDioClient {
   Future<IVerdict<dynamic>> get({

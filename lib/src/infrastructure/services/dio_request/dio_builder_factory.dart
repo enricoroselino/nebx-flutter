@@ -5,7 +5,7 @@ import 'package:nebx/src/infrastructure/services/dio_request/dio_implementation.
 import 'package:nebx/src/infrastructure/services/dio_request/interceptors/internet_interceptor.dart';
 import 'package:nebx/src/infrastructure/services/dio_request/interceptors/jwt_interceptor.dart';
 import 'package:nebx/src/infrastructure/services/internet_checker_implementation.dart';
-import 'package:nebx/src/shared/models/verdict.dart';
+import 'package:nebx_verdict/nebx_verdict.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class DioBuilderFactory {
