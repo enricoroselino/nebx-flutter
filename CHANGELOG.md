@@ -1,3 +1,5 @@
 ## 0.0.1
+* Initial Release.
 
-* TODO: Describe initial release.
+## 0.1.0
+* Strip package down to Dio and internet checker only.
