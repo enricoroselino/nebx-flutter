@@ -37,7 +37,7 @@ class SomeRepository {
         final result = await _client.get(url: endpoint, queryParams: query);
         if (result.isFailure) return Verdict.failed(result.issue);
         
-        late final monasMonumentForecast;
+        late final SomeDataModel monasMonumentForecast;
         
         try {
             final jsonObject = decode(result.data);
