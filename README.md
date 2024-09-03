@@ -13,7 +13,47 @@ Add the `nebx` package to your [pubspec dependencies](https://pub.dev/packages/n
 
 ## Examples
 
-Build pre-made Dio instance using DioBuilderFactory to automatically provide / refresh Json Web Token with logger and internet interceptors: 
+IDioClient GET / POST / PUT / DELETE method usage flow:
+
+```dart
+class SomeDataModel {
+    // ... add your properties here
+}
+
+class SomeRepository {
+    late final IDioClient _client;
+    
+    SomeRepository({required IDioClient client}) {
+        _client = client;
+    }
+    
+    Future<IVerdict<SomeDataModel>> getWeatherForecast() async {
+        const String endpoint = "weather-forecast";
+        final query = {
+            "longitude": 106.827194,
+            "latitude": -6.175372,
+        };
+        
+        final result = await _client.get(url: endpoint, queryParams: query);
+        if (result.isFailure) return Verdict.failed(result.issue);
+        
+        late final monasMonumentForecast;
+        
+        try {
+            final jsonObject = decode(result.data);
+            monasMonumentForecast = SomeDataModel.fromJson(jsonObject);
+        } catch (e) {
+            // catch if the deserialization fail
+            return Verdict.failed(Issue.parsing());
+        }
+        
+        return Verdict.successful(monasMonumentForecast);
+    }
+}
+```
+
+Build pre-made Dio instance using DioBuilderFactory to automatically provide / refresh Json Web Token with logger and
+internet interceptors:
 
 ```dart
 String loadToken() {
@@ -38,7 +78,7 @@ final IDioClient safeClient = DioBuilderFactory.clientJsonWebToken(
   .build();
 ```
 
-Build pre-made basic Dio instance with only logger and internet interceptors: 
+Build pre-made basic Dio instance with only logger and internet interceptors:
 
 ```dart
 final IDioClient safeClient = DioBuilderFactory.clientBasic(
@@ -47,7 +87,6 @@ final IDioClient safeClient = DioBuilderFactory.clientBasic(
   )
   .build();
 ```
-
 
 Build Dio instance manually with requirements:
 
@@ -69,7 +108,8 @@ final IDioClient safeClient = DioBuilder()
                     .build();
 ```
 
-Custom Internet Checker implementation: 
+Custom Internet Checker implementation:
+
 ```dart
 class YourOwnImplementation implements IInternetChecker {
     YourOwnImplementation() {
