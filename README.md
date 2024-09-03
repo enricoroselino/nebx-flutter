@@ -13,7 +13,7 @@ Add the `nebx` package to your [pubspec dependencies](https://pub.dev/packages/n
 
 ## Examples
 
-Build pre-made Dio instance using DioBuilderFactory to automatically provide and refresh Json Web Token with logger and internet interceptors: 
+Build pre-made Dio instance using DioBuilderFactory to automatically provide / refresh Json Web Token with logger and internet interceptors: 
 
 ```dart
 String loadToken() {
@@ -21,17 +21,17 @@ String loadToken() {
     return "random.jwt.token";
 }
 
-IVerdict<String> refreshToken() {
+Future<IVerdict<String>> refreshToken(IDioClient client) async {
   // ... do your api refreshing here then return the string
   return Verdict.successful("refreshed.jwt.token");
 }
 
 final checker = InternetCheckerImplementation();
 
-final safeClient = DioBuilderFactory.clientJsonWebToken(
+final IDioClient safeClient = DioBuilderFactory.clientJsonWebToken(
     baseUrl: "https://roselino.nebx.my.id/dummy",
     onTokenLoad: () => loadToken(),
-    onTokenRefresh: () => refreshToken(),
+    onTokenRefresh: (client) => refreshToken(client),
     internetChecker: checker,
   )
   .addRequestTimeOut(receiveTimeOutSeconds: 15, requestTimeOutSeconds: 5)
@@ -41,7 +41,7 @@ final safeClient = DioBuilderFactory.clientJsonWebToken(
 Build pre-made basic Dio instance with only logger and internet interceptors: 
 
 ```dart
-final safeClient = DioBuilderFactory.clientBasic(
+final IDioClient safeClient = DioBuilderFactory.clientBasic(
     baseUrl: "https://roselino.nebx.my.id/dummy",
     internetChecker: checker,
   )
@@ -60,7 +60,7 @@ Build Dio instance manually with requirements:
 final checker = InternetCheckerImplementation();
 final internetInterceptor = InternetInterceptor(checker: checker);
 
-final safeClient = DioBuilder()
+final IDioClient safeClient = DioBuilder()
                     .addDisableAutoDecoding()
                     .addRequestContentType(type: HttpContentType.json)
                     .addRequestTimeOut(receiveTimeOutSeconds: 15, requestTimeOutSeconds: 5)
