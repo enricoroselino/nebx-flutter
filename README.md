@@ -62,7 +62,7 @@ String loadToken() {
 }
 
 Future<IVerdict<String>> refreshToken(IDioClient client) async {
-  // ... do your api refreshing here then return the string
+  // ... do your api refreshing here, then return the string
   return Verdict.successful("refreshed.jwt.token");
 }
 
@@ -111,14 +111,14 @@ final IDioClient safeClient = DioBuilder(autoDecode: false)
 Decode / encode utility usage:
 
 ```dart
-// pretend this is what the returned json
+// pretend this is the returned json
 final String singleJsonResponse = "{\"longitude\":106.827194,\"latitude\":-6.175372,};";
 final String arrayJsonResponse = "[{\"longitude\":106.827194,\"latitude\":-6.175372,},{\"longitude\":106.827194,\"latitude\":-6.175372,}]";
 
 final Map<String, dynamic> singleJsonDecoded = CodecHelper.decodeJson(singleResponse);
 final List<dynamic> arrayJsonDecoded = CodecHelper.decodeJson<List>(arrayResponse);
 
-// pretend this is what the returned xml
+// pretend this is the returned xml
 final String singleXmlResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><root><data><longitude>106.827194<\/longitude><latitude>-6.175372<\/latitude><\/data><\/root>";
 final String arrayXmlResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><root><data><longitude>106.827194<\/longitude><latitude>-6.175372<\/latitude><\/data><data><longitude>106.827194<\/longitude><latitude>-6.175372<\/latitude><\/data><\/root>";
 
