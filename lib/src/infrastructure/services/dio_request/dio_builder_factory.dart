@@ -13,21 +13,7 @@ class DioBuilderFactory {
 
   static IDioBuilder get _builderBase => DioBuilder();
 
-  static IDioBuilder clientPlain({
-    required String baseUrl,
-    String requestContentType = HttpContentType.json,
-  }) {
-    return _builderBase
-        .addBaseUrl(url: baseUrl)
-        .addDisableAutoDecode()
-        .addRequestContentType(type: requestContentType);
-  }
-
-  static IDioBuilder clientBasic({
-    required String baseUrl,
-    required IInternetChecker internetChecker,
-    String requestContentType = HttpContentType.json,
-  }) {
+  static PrettyDioLogger get _logger {
     final logger = PrettyDioLogger(
       request: true,
       requestHeader: true,
@@ -35,25 +21,43 @@ class DioBuilderFactory {
       responseBody: true,
     );
 
-    final internetInterceptor = InternetInterceptor(checker: internetChecker);
+    return logger;
+  }
 
-    var builder = clientPlain(
-      baseUrl: baseUrl,
-      requestContentType: requestContentType,
-    ).addInterceptor(interceptor: (client) => internetInterceptor);
+  static IDioBuilder clientPlain({
+    String? baseUrl,
+    String requestContentType = HttpContentType.json,
+  }) {
+    return _builderBase
+        .addBaseUrl(url: baseUrl ?? "")
+        .addRequestContentType(type: requestContentType);
+  }
+
+  static IDioBuilder clientBasic({
+    String? baseUrl,
+    IInternetChecker? internetChecker,
+    String requestContentType = HttpContentType.json,
+  }) {
+    final netChecker = internetChecker ?? InternetCheckerImplementation();
+    final internetInterceptor = InternetInterceptor(checker: netChecker);
+
+    final builder = _builderBase
+        .addBaseUrl(url: baseUrl ?? "")
+        .addRequestContentType(type: requestContentType)
+        .addInterceptor(interceptor: (client) => internetInterceptor);
 
     if (!kReleaseMode) {
-      builder.addInterceptor(interceptor: (client) => logger);
+      builder.addInterceptor(interceptor: (client) => _logger);
     }
 
     return builder;
   }
 
   static IDioBuilder clientJsonWebToken({
-    required String baseUrl,
+    String? baseUrl,
     required String Function() onTokenLoad,
     Future<IVerdict<String>> Function(IDioClient)? onTokenRefresh,
-    required IInternetChecker internetChecker,
+    IInternetChecker? internetChecker,
     String requestContentType = HttpContentType.json,
   }) {
     final jwtInterceptor = JWTInterceptor(
@@ -61,11 +65,18 @@ class DioBuilderFactory {
       onTokenRefresh: onTokenRefresh,
     );
 
-    var builder = clientBasic(
-      baseUrl: baseUrl,
-      internetChecker: internetChecker,
-      requestContentType: requestContentType,
-    ).addInterceptor(interceptor: (client) => jwtInterceptor);
+    final netChecker = internetChecker ?? InternetCheckerImplementation();
+    final internetInterceptor = InternetInterceptor(checker: netChecker);
+
+    final builder = _builderBase
+        .addBaseUrl(url: baseUrl ?? "")
+        .addRequestContentType(type: requestContentType)
+        .addInterceptor(interceptor: (client) => internetInterceptor)
+        .addInterceptor(interceptor: (client) => jwtInterceptor);
+
+    if (!kReleaseMode) {
+      builder.addInterceptor(interceptor: (client) => _logger);
+    }
 
     return builder;
   }

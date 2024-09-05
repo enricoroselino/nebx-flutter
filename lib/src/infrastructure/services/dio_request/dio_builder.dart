@@ -11,7 +11,7 @@ abstract interface class IDioBuilder {
 
   DioBuilder addRequestContentType({required String type});
 
-  DioBuilder addDisableAutoDecode();
+  DioBuilder addResponseContentType({ResponseType type = ResponseType.plain});
 
   DioBuilder addInterceptor({
     required Interceptor Function(Dio) interceptor,
@@ -25,10 +25,13 @@ class DioBuilder implements IDioBuilder {
   late final List<Interceptor> _interceptors;
   late final Dio _dio;
 
-  DioBuilder() {
+  DioBuilder({bool autoDecode = false}) {
     _options = BaseOptions();
     _interceptors = [];
     _dio = Dio();
+
+    // toggle dio auto decoding.
+    if (!autoDecode) addResponseContentType(type: ResponseType.plain);
   }
 
   @override
@@ -55,8 +58,8 @@ class DioBuilder implements IDioBuilder {
   }
 
   @override
-  DioBuilder addDisableAutoDecode() {
-    _options.responseType = ResponseType.plain;
+  DioBuilder addResponseContentType({ResponseType type = ResponseType.plain}) {
+    _options.responseType = type;
     return this;
   }
 
