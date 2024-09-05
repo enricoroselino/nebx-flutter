@@ -115,8 +115,8 @@ Decode / encode utility usage:
 final String singleJsonResponse = "{\"longitude\":106.827194,\"latitude\":-6.175372,};";
 final String arrayJsonResponse = "[{\"longitude\":106.827194,\"latitude\":-6.175372,},{\"longitude\":106.827194,\"latitude\":-6.175372,}]";
 
-final Map<String, dynamic> singleJsonDecoded = CodecHelper.decodeJson(singleResponse);
-final List<dynamic> arrayJsonDecoded = CodecHelper.decodeJson<List>(arrayResponse);
+final Map<String, dynamic> singleJsonDecoded = CodecHelper.decodeJson(singleJsonResponse);
+final List<dynamic> arrayJsonDecoded = CodecHelper.decodeJson<List>(arrayJsonResponse);
 
 // pretend this is the returned xml
 final String singleXmlResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><root><data><longitude>106.827194<\/longitude><latitude>-6.175372<\/latitude><\/data><\/root>";
