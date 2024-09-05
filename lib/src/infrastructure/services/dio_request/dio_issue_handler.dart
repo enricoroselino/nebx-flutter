@@ -33,7 +33,6 @@ class DioIssueHandler implements IDioIssueHandler {
       return _unknownError(error: error);
     }
 
-    // in theory the status code will not null after the check
     final int statusCode = error.response!.statusCode!;
 
     if (statusCode == HttpStatus.forbidden) {
@@ -46,21 +45,37 @@ class DioIssueHandler implements IDioIssueHandler {
 
     if (statusCode == HttpStatus.unprocessableEntity ||
         statusCode == HttpStatus.badRequest) {
-      return Issue.badRequest(error.response?.data);
+      final message = _dioMessageParser(error);
+      return Issue.badRequest(message);
     }
 
     return _unknownError(error: error);
   }
 
   IIssue _unknownError({required DioException error}) {
-    final dioError = error.type.toString();
-    final statusCode = error.response?.statusCode ?? 520;
-    final defaultMessage = "[$statusCode] $dioError";
+    final String dioError = error.type.toString();
+    final int statusCode = error.response?.statusCode ?? 520;
+
+    final String? message = _dioMessageParser(error);
+    final String defaultMessage = "[$statusCode] $dioError";
 
     return Issue.other(
-      error.response?.data ?? defaultMessage,
+      message ?? defaultMessage,
       layer: IssueLayer.request,
       statusCode: statusCode,
     );
   }
+}
+
+String? _dioMessageParser(DioException error) {
+  if (error.response == null ||
+      error.response?.data == null ||
+      error.response?.data.runtimeType != String) {
+    return null;
+  }
+
+  var message = error.response!.data as String;
+  message = message.trim();
+
+  return message.isEmpty ? null : message;
 }
