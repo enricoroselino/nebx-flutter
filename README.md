@@ -119,8 +119,8 @@ final Map<String, dynamic> singleJsonDecoded = CodecHelper.decodeJson(singleResp
 final List<dynamic> arrayJsonDecoded = CodecHelper.decodeJson<List>(arrayResponse);
 
 // pretend this is what the returned xml
-final String singleXmlResponse = """<?xml version="1.0" encoding="UTF-8" ?><root><data><longitude>106.827194</longitude><latitude>-6.175372</latitude></data></root>""";
-final String arrayXmlResponse = """<?xml version="1.0" encoding="UTF-8" ?><root><data><longitude>106.827194</longitude><latitude>-6.175372</latitude></data><data><longitude>106.827194</longitude><latitude>-6.175372</latitude></data></root>""";
+final String singleXmlResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><root><data><longitude>106.827194<\/longitude><latitude>-6.175372<\/latitude><\/data><\/root>";
+final String arrayXmlResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><root><data><longitude>106.827194<\/longitude><latitude>-6.175372<\/latitude><\/data><data><longitude>106.827194<\/longitude><latitude>-6.175372<\/latitude><\/data><\/root>";
 
 final Map<String, dynamic> singleXmlDecoded = CodecHelper.decodeXml(singleXmlResponse);
 final List<dynamic> arrayXmlDecoded = CodecHelper.decodeXml<List>(arrayXmlResponse);
