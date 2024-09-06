@@ -1,15 +1,22 @@
+import 'dart:ffi';
+
 import 'package:dio/dio.dart';
 import 'package:nebx/src/infrastructure/services/dio_request/constants/http_content_type.dart';
+import 'package:nebx/src/infrastructure/services/dio_request/constants/http_header_key.dart';
 import 'package:nebx/src/infrastructure/services/dio_request/dio_issue_handler.dart';
 import 'package:nebx_verdict/nebx_verdict.dart';
-import 'package:universal_io/io.dart';
-
 
 abstract interface class IDioClient {
-  Future<IVerdict<dynamic>> get({
+  Future<IVerdict<T>> get<T>({
     required String url,
     Map<String, dynamic>? queryParams,
     Options? options,
+    CancelToken? cancelToken,
+  });
+
+  Future<IVerdict<List<Uint8>>> getBytes({
+    required String url,
+    Map<String, dynamic>? queryParams,
     CancelToken? cancelToken,
   });
 
@@ -19,6 +26,15 @@ abstract interface class IDioClient {
     Map<String, dynamic>? queryParams,
     Options? options,
     CancelToken? cancelToken,
+  });
+
+  Future<IVerdict<dynamic>> postStream({
+    required String url,
+    required List<Uint8> data,
+    Map<String, dynamic>? queryParams,
+    CancelToken? cancelToken,
+    void Function(int, int)? onReceiveProgress,
+    void Function(int, int)? onSendProgress,
   });
 
   Future<IVerdict<dynamic>> delete({
@@ -71,7 +87,7 @@ class DioImplementation implements IDioClient {
   }
 
   @override
-  Future<IVerdict<dynamic>> get({
+  Future<IVerdict<T>> get<T>({
     required String url,
     Map<String, dynamic>? queryParams,
     Options? options,
@@ -95,6 +111,22 @@ class DioImplementation implements IDioClient {
       final issue = Issue.other(e.toString());
       return Verdict.failed(issue);
     }
+  }
+
+  @override
+  Future<IVerdict<List<Uint8>>> getBytes({
+    required String url,
+    Map<String, dynamic>? queryParams,
+    CancelToken? cancelToken,
+  }) async {
+    final options = Options(responseType: ResponseType.bytes);
+
+    return await get<List<Uint8>>(
+      url: url,
+      queryParams: queryParams,
+      options: options,
+      cancelToken: cancelToken,
+    );
   }
 
   @override
@@ -126,6 +158,30 @@ class DioImplementation implements IDioClient {
       final issue = Issue.other(e.toString());
       return Verdict.failed(issue);
     }
+  }
+
+  @override
+  Future<IVerdict<dynamic>> postStream({
+    required String url,
+    required List<Uint8> data,
+    Map<String, dynamic>? queryParams,
+    CancelToken? cancelToken,
+    void Function(int, int)? onReceiveProgress,
+    void Function(int, int)? onSendProgress,
+  }) async {
+    final options = Options(
+      headers: {HttpHeaderKey.contentLength: data.length},
+    );
+
+    return await post(
+      url: url,
+      data: Stream.fromIterable(data.map((e) => [e])),
+      options: options,
+      queryParams: queryParams,
+      cancelToken: cancelToken,
+      onReceiveProgress: onReceiveProgress,
+      onSendProgress: onSendProgress,
+    );
   }
 
   @override
@@ -238,7 +294,7 @@ class DioImplementation implements IDioClient {
     void Function(int, int)? onReceiveProgress,
   }) async {
     try {
-      final headers = {HttpHeaders.acceptEncodingHeader: '*'};
+      final headers = {HttpHeaderKey.acceptEncoding: '*'};
       final options = Options(
         responseType: ResponseType.bytes,
         headers: headers,
@@ -269,3 +325,13 @@ class DioImplementation implements IDioClient {
     _client.close(force: force);
   }
 }
+
+// do later lah lol
+// Options _optionsMerger(Options newOptions, Options definedOptions) {
+//   return Options(
+//     method: definedOptions.method ?? newOptions.method,
+//     sendTimeout: definedOptions.sendTimeout ?? newOptions.sendTimeout,
+//     receiveTimeout: definedOptions.receiveTimeout ?? newOptions.receiveTimeout,
+//     extra: definedOptions.extra ?? newOptions.extra,
+//   );
+// }
