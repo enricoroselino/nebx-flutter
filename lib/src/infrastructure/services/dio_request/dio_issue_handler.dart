@@ -45,7 +45,7 @@ class DioIssueHandler implements IDioIssueHandler {
 
     if (statusCode == HttpStatusCode.unprocessableEntity ||
         statusCode == HttpStatusCode.badRequest) {
-      final message = _dioMessageParser(error);
+      final message = _dioMessageInitializer(error);
       return Issue.badRequest(message);
     }
 
@@ -54,10 +54,9 @@ class DioIssueHandler implements IDioIssueHandler {
 
   IIssue _unknownError({required DioException error}) {
     final String dioError = error.type.toString();
-    final int statusCode =
-        error.response?.statusCode ?? HttpStatusCode.unknown;
+    final int statusCode = error.response?.statusCode ?? HttpStatusCode.unknown;
 
-    final String? message = _dioMessageParser(error);
+    final String? message = _dioMessageInitializer(error);
     final String defaultMessage = "[$statusCode] $dioError";
 
     return Issue.other(
@@ -68,15 +67,16 @@ class DioIssueHandler implements IDioIssueHandler {
   }
 }
 
-String? _dioMessageParser(DioException error) {
+String? _dioMessageInitializer(DioException error) {
+  // should handle if the server returns a string data
+  // for a validation purpose
+
   if (error.response == null ||
       error.response?.data == null ||
       error.response?.data.runtimeType != String) {
     return null;
   }
 
-  var message = error.response!.data as String;
-  message = message.trim();
-
-  return message.isEmpty ? null : message;
+  final message = error.response!.data as String;
+  return message.trim().isEmpty ? null : message;
 }
