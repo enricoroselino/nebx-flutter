@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:nebx/src/infrastructure/services/dio_request/constants/http_status_codes.dart';
 import 'package:nebx_verdict/nebx_verdict.dart';
-import 'package:universal_io/io.dart';
 
 abstract interface class IDioIssueHandler {
   IIssue mapIssue({required DioException error});
@@ -13,13 +13,13 @@ class DioIssueHandler implements IDioIssueHandler {
       case DioExceptionType.badResponse:
         return _badResponseError(error: error);
       case DioExceptionType.connectionTimeout:
-        return Issue.timeout(HttpStatus.networkConnectTimeoutError);
+        return Issue.timeout(HttpStatusCode.connectionTimedOut);
       case DioExceptionType.sendTimeout:
-        return Issue.timeout(HttpStatus.requestTimeout);
+        return Issue.timeout();
       case DioExceptionType.receiveTimeout:
-        return Issue.timeout(HttpStatus.requestTimeout);
+        return Issue.timeout();
       case DioExceptionType.connectionError:
-        return Issue.timeout(HttpStatus.gatewayTimeout);
+        return Issue.timeout(HttpStatusCode.gatewayTimeout);
       case DioExceptionType.cancel:
         return Issue.requestCancelled();
       default:
@@ -35,16 +35,16 @@ class DioIssueHandler implements IDioIssueHandler {
 
     final int statusCode = error.response!.statusCode!;
 
-    if (statusCode == HttpStatus.forbidden) {
+    if (statusCode == HttpStatusCode.forbidden) {
       return Issue.forbidden();
     }
 
-    if (statusCode == HttpStatus.unauthorized) {
+    if (statusCode == HttpStatusCode.unauthorized) {
       return Issue.authorization();
     }
 
-    if (statusCode == HttpStatus.unprocessableEntity ||
-        statusCode == HttpStatus.badRequest) {
+    if (statusCode == HttpStatusCode.unprocessableEntity ||
+        statusCode == HttpStatusCode.badRequest) {
       final message = _dioMessageParser(error);
       return Issue.badRequest(message);
     }
@@ -54,7 +54,8 @@ class DioIssueHandler implements IDioIssueHandler {
 
   IIssue _unknownError({required DioException error}) {
     final String dioError = error.type.toString();
-    final int statusCode = error.response?.statusCode ?? 520;
+    final int statusCode =
+        error.response?.statusCode ?? HttpStatusCode.unknown;
 
     final String? message = _dioMessageParser(error);
     final String defaultMessage = "[$statusCode] $dioError";

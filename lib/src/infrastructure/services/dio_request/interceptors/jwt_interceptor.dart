@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:nebx/src/infrastructure/services/dio_request/constants/http_status_codes.dart';
 import 'package:nebx/src/infrastructure/services/dio_request/dio_builder_factory.dart';
 import 'package:nebx/src/infrastructure/services/dio_request/dio_implementation.dart';
 import 'package:nebx/src/shared/helpers/token_helper.dart';
 import 'package:nebx_verdict/nebx_verdict.dart';
-import 'package:universal_io/io.dart';
 
 class JWTInterceptor extends Interceptor {
   late final String Function() _onJWTLoad;
@@ -34,7 +34,7 @@ class JWTInterceptor extends Interceptor {
   Future onError(DioException err, ErrorInterceptorHandler handler) async {
     if (_onJWTRefresh == null) return super.onError(err, handler);
 
-    if (err.response?.statusCode != HttpStatus.unauthorized) {
+    if (err.response?.statusCode != HttpStatusCode.unauthorized) {
       return super.onError(err, handler);
     }
 
