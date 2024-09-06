@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:nebx/src/infrastructure/services/dio_request/dio_implementation.dart';
 
 abstract interface class IDioBuilder {
   DioBuilder addRequestTimeOut({
@@ -17,7 +16,7 @@ abstract interface class IDioBuilder {
     required Interceptor Function(Dio) interceptor,
   });
 
-  IDioClient build();
+  Dio build();
 }
 
 class DioBuilder implements IDioBuilder {
@@ -72,9 +71,9 @@ class DioBuilder implements IDioBuilder {
   }
 
   @override
-  IDioClient build() {
+  Dio build() {
     _dio.options = _options;
     _dio.interceptors.addAll(_interceptors);
-    return DioImplementation(dioClient: _dio);
+    return _dio;
   }
 }
