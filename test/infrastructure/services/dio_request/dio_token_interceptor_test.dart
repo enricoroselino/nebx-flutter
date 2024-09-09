@@ -183,7 +183,6 @@ void main() async {
       final result = await sut.get(url: unauthorizedEndpoint);
 
       // for the time being, i cant test the internally created client
-      // expect to fail the operation but expect the token is refreshed
       expect(result.isFailure, true);
       expect(result.issue.statusCode, 401);
       expect(result.issue.issueType, IssueType.authorization);
