@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:nebx/nebx.dart';
 
 abstract interface class IDioBuilder {
   DioBuilder addRequestTimeOut({
@@ -17,6 +18,8 @@ abstract interface class IDioBuilder {
   });
 
   Dio build();
+
+  IDioClient buildErrorHandling();
 }
 
 class DioBuilder implements IDioBuilder {
@@ -75,5 +78,10 @@ class DioBuilder implements IDioBuilder {
     _dio.options = _options;
     _dio.interceptors.addAll(_interceptors);
     return _dio;
+  }
+
+  @override
+  IDioClient buildErrorHandling() {
+    return build().withErrorHandler;
   }
 }
