@@ -27,6 +27,7 @@ class JWTInterceptor extends Interceptor {
       headers: options.headers,
       token: accessToken,
     );
+
     return super.onRequest(options, handler);
   }
 
@@ -43,9 +44,13 @@ class JWTInterceptor extends Interceptor {
             .buildErrorHandling();
 
     final refreshResult = await _onJWTRefresh(newClient);
-    if (refreshResult.isFailure) return super.onError(err, handler);
+    if (refreshResult.isFailure || refreshResult.data == null) {
+      return super.onError(err, handler);
+    }
 
-    final newToken = refreshResult.data!;
+    final newToken = refreshResult.data!.trim();
+    if (newToken.isEmpty) return super.onError(err, handler);
+
     TokenHelper.addJWTHeader(
       headers: err.requestOptions.headers,
       token: newToken,

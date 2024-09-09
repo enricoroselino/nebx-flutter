@@ -73,6 +73,8 @@ abstract interface class IDioClient {
   });
 
   void close({bool force = false});
+
+  Dio get dio;
 }
 
 // letting the return type dynamic as the body message parsing into object is not
@@ -324,6 +326,9 @@ class DioImplementation implements IDioClient {
   void close({bool force = false}) {
     _client.close(force: force);
   }
+
+  @override
+  Dio get dio => _client;
 }
 
 extension DioExtension on Dio {

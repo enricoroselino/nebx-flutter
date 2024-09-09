@@ -28,12 +28,11 @@ class DioIssueHandler implements IDioIssueHandler {
   }
 
   IIssue _badResponseError({required DioException error}) {
-    if (error.type != DioExceptionType.badResponse ||
-        error.response?.statusCode.runtimeType != int) {
+    if (error.type != DioExceptionType.badResponse) {
       return _unknownError(error: error);
     }
 
-    final int statusCode = error.response!.statusCode!;
+    final int? statusCode = error.response?.statusCode;
 
     if (statusCode == HttpStatusCode.forbidden) {
       return Issue.forbidden();
