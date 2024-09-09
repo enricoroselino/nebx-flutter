@@ -75,7 +75,7 @@ final IDioClient safeClient = DioBuilderFactory.clientJsonWebToken(
     internetChecker: checker,
   )
   .addRequestTimeOut(receiveTimeOutSeconds: 15, requestTimeOutSeconds: 5)
-  .build();
+  .buildErrorHandling();
 ```
 
 Build pre-made basic Dio instance with only logger and internet interceptors:
@@ -85,7 +85,7 @@ final IDioClient safeClient = DioBuilderFactory.clientBasic(
     baseUrl: "https://roselino.nebx.my.id/dummy",
     internetChecker: checker,
   )
-  .build();
+  .buildErrorHandling();
 ```
 
 Build Dio instance manually with requirements:
@@ -100,12 +100,12 @@ Build Dio instance manually with requirements:
 final checker = InternetCheckerImplementation();
 final internetInterceptor = InternetInterceptor(checker: checker);
 
-final IDioClient safeClient = DioBuilder(autoDecode: false)
+final IDioClient client = DioBuilder(autoDecode: false)
     .addRequestContentType(type: HttpContentType.json)
     .addRequestTimeOut(receiveTimeOutSeconds: 15, requestTimeOutSeconds: 5)
     .addInterceptor(interceptor: (client) => internetInterceptor)
     .addInterceptor(interceptor: (client) => anotherInterceptor)
-    .build();
+    .buildErrorHandling();
 ```
 
 Decode / encode utility usage:
