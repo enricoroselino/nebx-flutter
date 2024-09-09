@@ -51,14 +51,11 @@ void main() async {
   group("JWT Interceptor", () {
     const String loginEndpoint = "/login";
     const String authorizedOnlyEndpoint = "/secret";
-    const String refreshTokenEndpoint = "/refresh";
 
     final loginPayload = {
       "username": "roselino",
       "password": "mystrongpassword"
     };
-
-    final refreshTokenPayload = {"refreshToken": expectedRefreshToken};
 
     Future<IVerdict> loginRepository(IDioClient client) async {
       final result = await client.post(url: loginEndpoint, data: loginPayload);
