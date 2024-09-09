@@ -38,11 +38,10 @@ class JWTInterceptor extends Interceptor {
       return super.onError(err, handler);
     }
 
-    final Dio newDio = DioBuilderFactory.clientPlain(
-      baseUrl: err.requestOptions.baseUrl,
-    ).build();
+    final IDioClient newClient =
+        DioBuilderFactory.clientPlain(baseUrl: err.requestOptions.baseUrl)
+            .buildErrorHandling();
 
-    final IDioClient newClient = newDio.withErrorHandler;
     final refreshResult = await _onJWTRefresh(newClient);
     if (refreshResult.isFailure) return super.onError(err, handler);
 
