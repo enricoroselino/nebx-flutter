@@ -326,12 +326,8 @@ class DioImplementation implements IDioClient {
   }
 }
 
-// do later lah lol
-// Options _optionsMerger(Options newOptions, Options definedOptions) {
-//   return Options(
-//     method: definedOptions.method ?? newOptions.method,
-//     sendTimeout: definedOptions.sendTimeout ?? newOptions.sendTimeout,
-//     receiveTimeout: definedOptions.receiveTimeout ?? newOptions.receiveTimeout,
-//     extra: definedOptions.extra ?? newOptions.extra,
-//   );
-// }
+extension DioExtension on Dio {
+  IDioClient get withErrorHandler {
+    return DioImplementation(dioClient: this);
+  }
+}
