@@ -114,8 +114,8 @@ Decode / encode utility usage:
 
 ```dart
 // pretend this is the returned json
-final String singleJsonResponse = "{\"longitude\":106.827194,\"latitude\":-6.175372,};";
-final String arrayJsonResponse = "[{\"longitude\":106.827194,\"latitude\":-6.175372,},{\"longitude\":106.827194,\"latitude\":-6.175372,}]";
+final String singleJsonResponse = "{\"longitude\":106.827194,\"latitude\":-6.175372};";
+final String arrayJsonResponse = "[{\"longitude\":106.827194,\"latitude\":-6.175372},{\"longitude\":106.827194,\"latitude\":-6.175372}]";
 
 final Map<String, dynamic> singleJsonDecoded = CodecHelper.decodeJson(singleJsonResponse);
 final List<dynamic> arrayJsonDecoded = CodecHelper.decodeJson<List>(arrayJsonResponse);
