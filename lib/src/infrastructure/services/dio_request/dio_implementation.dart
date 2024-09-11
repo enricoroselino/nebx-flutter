@@ -17,6 +17,7 @@ abstract interface class IDioClient {
   Future<IVerdict<List<Uint8>>> getBytes({
     required String url,
     Map<String, dynamic>? queryParams,
+    Options? options,
     CancelToken? cancelToken,
   });
 
@@ -32,6 +33,7 @@ abstract interface class IDioClient {
     required String url,
     required List<Uint8> data,
     Map<String, dynamic>? queryParams,
+    Options? options,
     CancelToken? cancelToken,
     void Function(int, int)? onReceiveProgress,
     void Function(int, int)? onSendProgress,
@@ -53,7 +55,9 @@ abstract interface class IDioClient {
     CancelToken? cancelToken,
   });
 
-  Future<IVerdict<dynamic>> fetch({required RequestOptions requestOptions});
+  Future<IVerdict<Response>> fetch({
+    required RequestOptions requestOptions,
+  });
 
   Future<IVerdict> download({
     required String url,
@@ -119,14 +123,17 @@ class DioImplementation implements IDioClient {
   Future<IVerdict<List<Uint8>>> getBytes({
     required String url,
     Map<String, dynamic>? queryParams,
+    Options? options,
     CancelToken? cancelToken,
   }) async {
-    final options = Options(responseType: ResponseType.bytes);
+    final defaultOptions = Options(responseType: ResponseType.bytes);
+    // override the passed option response type, if any
+    options?.responseType = ResponseType.bytes;
 
     return await get<List<Uint8>>(
       url: url,
       queryParams: queryParams,
-      options: options,
+      options: options ?? defaultOptions,
       cancelToken: cancelToken,
     );
   }
@@ -168,17 +175,19 @@ class DioImplementation implements IDioClient {
     required List<Uint8> data,
     Map<String, dynamic>? queryParams,
     CancelToken? cancelToken,
+    Options? options,
     void Function(int, int)? onReceiveProgress,
     void Function(int, int)? onSendProgress,
   }) async {
-    final options = Options(
-      headers: {HttpHeaderKey.contentLength: data.length},
-    );
+    final streamHeader = {HttpHeaderKey.contentLength: data.length};
+    final defaultOptions = Options(headers: streamHeader);
+    // override the header of passed options, if any
+    options?.headers?.addAll(streamHeader);
 
     return await post(
       url: url,
       data: Stream.fromIterable(data.map((e) => [e])),
-      options: options,
+      options: options ?? defaultOptions,
       queryParams: queryParams,
       cancelToken: cancelToken,
       onReceiveProgress: onReceiveProgress,
@@ -241,12 +250,12 @@ class DioImplementation implements IDioClient {
   }
 
   @override
-  Future<IVerdict<dynamic>> fetch({
+  Future<IVerdict<Response<dynamic>>> fetch({
     required RequestOptions requestOptions,
   }) async {
     try {
       final response = await _client.fetch(requestOptions);
-      return Verdict.successful(response.data);
+      return Verdict.successful(response);
     } on DioException catch (e) {
       final issue = _issueHandler.mapIssue(error: e);
       return Verdict.failed(issue);
