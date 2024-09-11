@@ -33,7 +33,7 @@ class DioBuilder implements IDioBuilder {
     _dio = Dio();
 
     // toggle dio auto decoding.
-    if (!autoDecode) addResponseContentType(type: ResponseType.plain);
+    if (autoDecode == false) addResponseContentType(type: ResponseType.plain);
   }
 
   @override
