@@ -5,4 +5,9 @@
 * Strip package down to Dio and internet checker only.
 
 ## 0.1.1
-* Strip result pattern and add nebx_verdict as a result pattern.
+* Strip result pattern and add nebx_verdict as a result pattern dependency.
+
+## 0.1.10
+* Added tests
+* Fully working json web token interceptor
+* Added FormDataBuilder

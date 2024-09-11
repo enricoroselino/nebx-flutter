@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:nebx/src/shared/helpers/file_helper.dart';
 
 abstract interface class IFormDataBuilder {
   FormDataBuilder addRecords(Map<String, dynamic> keyValues);
@@ -61,12 +60,10 @@ class FormDataBuilder implements IFormDataBuilder {
     required PlatformFile file,
     MediaType? contentType,
   }) {
-    if (!FileHelper.isFilePicked(file)) return this;
-
     final multipart = MultipartFile.fromFileSync(
       file.path!,
       filename: file.name,
-      contentType: contentType ?? FileHelper.parseMediaType(file),
+      contentType: contentType,
     );
 
     _attachments.add(multipart);
@@ -78,13 +75,11 @@ class FormDataBuilder implements IFormDataBuilder {
     required PlatformFile file,
     MediaType? contentType,
   }) {
-    if (!FileHelper.isFilePicked(file)) return this;
-
     final multipart = MultipartFile.fromStream(
       () => file.readStream!,
       file.size,
       filename: file.name,
-      contentType: contentType ?? FileHelper.parseMediaType(file),
+      contentType: contentType,
     );
 
     _attachments.add(multipart);

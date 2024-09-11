@@ -13,6 +13,8 @@ Add the `nebx` package to your [pubspec dependencies](https://pub.dev/packages/n
 
 ## Examples
 
+Example project can be cloned from [nebx-minimal-example](https://github.com/enricoroselino/nebx-minimal-example/blob/main/lib/client_example.dart).
+
 IDioClient GET / POST / PUT / DELETE method usage flow:
 
 ```dart
