@@ -1,6 +1,6 @@
 name: nebx
 description: "Nebx is a wrapper that support a powerful Dio HTTP client with error handling included."
-version: 0.1.8
+version: 0.1.9
 homepage: https://github.com/enricoroselino/nebx-flutter
 repository: https://github.com/enricoroselino/nebx-flutter
 
