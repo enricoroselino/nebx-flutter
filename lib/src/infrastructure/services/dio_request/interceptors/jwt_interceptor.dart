@@ -20,7 +20,8 @@ class JWTInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final String accessToken = _onJWTLoad();
-    // continue the request if accessToken not available
+
+    // continue the request if accessToken not available yet
     if (accessToken.trim().isEmpty) return super.onRequest(options, handler);
 
     TokenHelper.addJWTHeader(
@@ -39,9 +40,9 @@ class JWTInterceptor extends Interceptor {
       return super.onError(err, handler);
     }
 
-    final IDioClient newClient =
-        DioBuilderFactory.clientPlain(baseUrl: err.requestOptions.baseUrl)
-            .buildErrorHandling();
+    final IDioClient newClient = DioBuilderFactory.clientBasic(
+      baseUrl: err.requestOptions.baseUrl,
+    ).buildErrorHandling();
 
     final refreshResult = await _onJWTRefresh(newClient);
     if (refreshResult.isFailure || refreshResult.data == null) {
@@ -52,15 +53,13 @@ class JWTInterceptor extends Interceptor {
     if (newToken.isEmpty) return super.onError(err, handler);
 
     TokenHelper.addJWTHeader(
-      headers: err.requestOptions.headers,
-      token: newToken,
-    );
+        headers: err.requestOptions.headers, token: newToken);
 
-    final retryResult =
+    final IVerdict<Response> retryResult =
         await newClient.fetch(requestOptions: err.requestOptions);
     if (retryResult.isFailure) return super.onError(err, handler);
 
-    newClient.close();
-    return handler.resolve(retryResult.data);
+    newClient.close(); // closing the client so it doesn't take more resource
+    return handler.resolve(retryResult.data as Response);
   }
 }
