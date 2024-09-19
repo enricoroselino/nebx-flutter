@@ -1,12 +1,10 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:nebx/nebx.dart';
 import 'package:nebx/src/infrastructure/services/dio_request/constants/http_header_key.dart';
 import 'package:nebx/src/infrastructure/services/dio_request/constants/http_status_codes.dart';
-import 'package:nebx_verdict/nebx_verdict.dart';
 
 class LoginTestResponse {
   final String accessToken;
