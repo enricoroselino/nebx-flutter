@@ -15,3 +15,9 @@
 ## 0.1.12
 * Expose dio package
 * Expose nebx-verdict package
+
+## 0.1.13
+* change onTokenLoad to a Future<String> for supporting async token loading
+* updated dio to 5.7.0
+* updated internet_connection_checker_plus to 2.5.2
+* updated xml2json to 6.24
