@@ -6,11 +6,11 @@ import 'package:nebx/src/shared/helpers/token_helper.dart';
 import 'package:nebx_verdict/nebx_verdict.dart';
 
 class JWTInterceptor extends Interceptor {
-  late final String Function() _onJWTLoad;
+  late final Future<String> Function() _onJWTLoad;
   late final Future<IVerdict<String>> Function(IDioClient)? _onJWTRefresh;
 
   JWTInterceptor({
-    required String Function() onTokenLoad,
+    required Future<String> Function() onTokenLoad,
     Future<IVerdict<String>> Function(IDioClient)? onTokenRefresh,
   }) {
     _onJWTLoad = onTokenLoad;
@@ -18,8 +18,11 @@ class JWTInterceptor extends Interceptor {
   }
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final String accessToken = _onJWTLoad();
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    final String accessToken = await _onJWTLoad();
 
     // continue the request if accessToken not available yet
     if (accessToken.trim().isEmpty) return super.onRequest(options, handler);
