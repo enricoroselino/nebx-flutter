@@ -11,3 +11,7 @@
 * Added tests
 * Fully working json web token interceptor
 * Added FormDataBuilder
+
+## 0.1.12
+* Expose dio package
+* Expose nebx-verdict package
