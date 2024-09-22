@@ -55,7 +55,7 @@ class DioBuilderFactory {
 
   static IDioBuilder clientJsonWebToken({
     String? baseUrl,
-    required String Function() onTokenLoad,
+    required Future<String> Function() onTokenLoad,
     Future<IVerdict<String>> Function(IDioClient)? onTokenRefresh,
     IInternetChecker? internetChecker,
     String requestContentType = HttpContentType.json,

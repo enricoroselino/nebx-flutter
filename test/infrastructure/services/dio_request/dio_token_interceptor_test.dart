@@ -37,7 +37,7 @@ void main() async {
   const String expectedRefreshToken = "my-valid-refresh-token";
   const String authorizedData = "ok";
 
-  String tokenLoader() {
+  Future<String> tokenLoader() async {
     // token loader is only to load the token not includes the saving mechanism
     // the saving mechanism is done at your login repository
     return accessToken;
