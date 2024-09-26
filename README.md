@@ -58,7 +58,7 @@ Build pre-made Dio instance using DioBuilderFactory to automatically provide / r
 internet interceptors:
 
 ```dart
-String loadToken() {
+Future<String> loadToken() async {
     // ... load your token here
     return "random.jwt.token";
 }
